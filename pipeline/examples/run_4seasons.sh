@@ -13,7 +13,7 @@
 # fill password and get the links
 
 ###############################################
-SEASONS_DATASET_ROOT_URL=
+SEASONS_DATASET_ROOT_URL="https://vision.cs.tum.edu/webshare/g/4seasons-dataset"
 SEASONS_DATASET_RELOCATION_ROOT_URL="https://github.com/pmwenzel/mlad-iccv2021/raw/main/"
 ################################################
 
@@ -33,13 +33,13 @@ PYTHONBIN=python3
 WORKING_DIR=${PWD}
 TMP_DIR=/tmp/4seasons/
 DATASETS_PATH=${WORKING_DIR}/datasets/4seasons
-DATASET_NAMES=("countryside" "neighborhood" "old_town")
-DATASET_MAPPING=("recording_2020-10-08_09-57-28" "recording_2021-02-25_13-25-15" "recording_2020-10-08_11-53-41")
-DATASET_VALIDATION=("recording_2020-06-12_11-26-43" "recording_2020-12-22_11-54-24" "recording_2021-01-07_10-49-45")
-DATASET_QUERY=("recording_2021-01-07_14-03-57" "recording_2021-05-10_18-26-26" "recording_2021-05-10_19-51-14")
-DATASET_RELOCATION=("relocalizationFile_recording_2020-10-08_09-57-28_to_recording_2021-01-07_14-03-57.txt" \
-               "relocalizationFile_recording_2021-02-25_13-25-15_to_recording_2021-05-10_18-26-26.txt" \
-               "relocalizationFile_recording_2020-10-08_11-53-41_to_recording_2021-05-10_19-51-14.txt" )
+DATASET_NAMES=("office_loop" "neighborhood" "old_town")
+DATASET_MAPPING=("recording_2020-03-24_17-36-22" "recording_2021-02-25_13-25-15" "recording_2020-10-08_11-53-41")
+DATASET_VALIDATION=("recording_2020-06-12_10-10-57" "recording_2020-12-22_11-54-24" "recording_2021-01-07_10-49-45")
+DATASET_QUERY=("recording_2021-01-07_12-04-03" "recording_2021-05-10_18-32-32" "recording_2021-05-10_21-32-00")
+DATASET_RELOCATION=("relocalizationFile_recording_2020-03-24_17-36-22_to_recording_2021-01-07_12-04-03.txt" \
+               "relocalizationFile_recording_2021-02-25_13-25-15_to_recording_recording_2021-05-10_18-32-32.txt" \
+               "relocalizationFile_recording_2020-10-08_11-53-41_to_recording_2021-05-10_21-32-00.txt" )
 #DATASET_ALL=("${DATASET_MAPPING[@]}" "${DATASET_QUERY[@]}")
 
 
@@ -48,12 +48,12 @@ DATASET_RELOCATION=("relocalizationFile_recording_2020-10-08_09-57-28_to_recordi
 #LOCAL_FEAT_DESC=faster2d2_WASF_N8_big
 #LOCAL_FEAT_KPTS=200 # number of local features to extract
 #GLOBAL_FEAT_TOPK=5  # number of retrieved images for mapping and localization
-#DATASET_NAMES=("countryside")
-#DATASET_MAPPING=("recording_2020-10-08_09-57-28")
-#DATASET_VALIDATION=("recording_2020-06-12_11-26-43")
-#DATASET_QUERY=("recording_2021-01-07_14-03-57")
-#DATASET_RELOCATION=("relocalizationFile_recording_2020-10-08_09-57-28_to_recording_2021-01-07_14-03-57.txt")
-DATASET_ALL=("${DATASET_MAPPING[@]}" "${DATASET_VALIDATION[@]}" "${DATASET_QUERY[@]}")
+# DATASET_NAMES=("neighborhood")
+# DATASET_MAPPING=("recording_2021-02-25_13-25-15")
+# DATASET_VALIDATION=("recording_2020-12-22_11-54-24")
+# DATASET_QUERY=("recording_2021-05-10_18-32-32")
+# DATASET_RELOCATION=("relocalizationFile_recording_2021-02-25_13-25-15_to_recording_2021-05-10_18-32-32.txt")
+# DATASET_ALL=("${DATASET_MAPPING[@]}" "${DATASET_VALIDATION[@]}" "${DATASET_QUERY[@]}")
 
 # 0) install required tools
 pip3 install scikit-learn==0.22 torchvision==0.5.0 gdown tqdm
@@ -223,3 +223,4 @@ for i in "${!DATASET_NAMES[@]}"; do
   # you may find relocation to send to dataset benchmark in:
   echo ${DATASETS_PATH}/places/${PLACES}/${DATASET_RELOCATION[i]}
 done
+
