@@ -107,3 +107,6 @@ venv.bak/
 
 # vscode config files
 .vscode/
+
+# data dir
+data/
