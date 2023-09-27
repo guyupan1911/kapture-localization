@@ -36,9 +36,10 @@ function start_container() {
 
     xhost +local:docker
     set -x
-    docker run -it \
-        -d \
-        --privileged \
+    docker run -itd \
+        --rm \
+        --runtime=nvidia \
+        --privileged=true \
         --name "${KAPTURE_CONTAINER}" \
         -e DISPLAY="${display}" \
         -e DOCKER_IMG="${image}" \
