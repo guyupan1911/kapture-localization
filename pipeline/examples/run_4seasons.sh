@@ -45,18 +45,18 @@ DATASET_RELOCATION=("relocalizationFile_recording_2020-03-24_17-36-22_to_recordi
 
 # override vars for fast test
 # uncomment the following to do a fastest test on subset with low quality parameters.
-#LOCAL_FEAT_DESC=faster2d2_WASF_N8_big
-#LOCAL_FEAT_KPTS=200 # number of local features to extract
-#GLOBAL_FEAT_TOPK=5  # number of retrieved images for mapping and localization
-# DATASET_NAMES=("neighborhood")
-# DATASET_MAPPING=("recording_2021-02-25_13-25-15")
-# DATASET_VALIDATION=("recording_2020-12-22_11-54-24")
-# DATASET_QUERY=("recording_2021-05-10_18-32-32")
-# DATASET_RELOCATION=("relocalizationFile_recording_2021-02-25_13-25-15_to_recording_2021-05-10_18-32-32.txt")
-# DATASET_ALL=("${DATASET_MAPPING[@]}" "${DATASET_VALIDATION[@]}" "${DATASET_QUERY[@]}")
+LOCAL_FEAT_DESC=faster2d2_WASF_N8_big
+LOCAL_FEAT_KPTS=200 # number of local features to extract
+GLOBAL_FEAT_TOPK=5  # number of retrieved images for mapping and localization
+DATASET_NAMES=("neighborhood")
+DATASET_MAPPING=("recording_2021-02-25_13-25-15")
+DATASET_VALIDATION=("recording_2020-12-22_11-54-24")
+DATASET_QUERY=("recording_2021-05-10_18-32-32")
+DATASET_RELOCATION=("relocalizationFile_recording_2021-02-25_13-25-15_to_recording_2021-05-10_18-32-32.txt")
+DATASET_ALL=("${DATASET_MAPPING[@]}" "${DATASET_VALIDATION[@]}" "${DATASET_QUERY[@]}")
 
 # 0) install required tools
-pip3 install scikit-learn==0.22 torchvision==0.5.0 gdown tqdm
+pip3 install scikit-learn==0.22 gdown tqdm
 
 
 # 1) Download dataset
@@ -101,12 +101,10 @@ if [ ! -d ${DATASETS_PATH}/places ]; then
   for i in "${!DATASET_NAMES[@]}"; do
     mkdir -p ${DATASETS_PATH}/places/${DATASET_NAMES[i]}/{mapping,query};
     ln -s ../../../records/${DATASET_MAPPING[i]}/sensors ${DATASET_NAMES[i]}/mapping/sensors;
-    ln -s ../../../records/${DATASET_VALIDATION[i]}/sensors ${DATASET_NAMES[i]}/validation/sensors;
     ln -s ../../../records/${DATASET_QUERY[i]}/sensors ${DATASET_NAMES[i]}/query/sensors;
 
     kapture_merge.py -v info \
     -i ${DATASETS_PATH}/places/${DATASET_NAMES[i]}/mapping \
-       ${DATASETS_PATH}/places/${DATASET_NAMES[i]}/validation \
        ${DATASETS_PATH}/places/${DATASET_NAMES[i]}/query \
     -o ${DATASETS_PATH}/places/${DATASET_NAMES[i]}/mapping_validation_query \
     --image_transfer link_relative
@@ -177,23 +175,23 @@ for PLACE in ${DATASET_NAMES[*]}; do
 done
 
 # 7) localization validation
-for PLACE in ${DATASET_NAMES[*]}; do
-  kapture_pipeline_localize.py -v debug -f \
-    -i ${DATASETS_PATH}/places/${PLACE}/mapping \
-    --query ${DATASETS_PATH}/places/${PLACE}/validation \
-    -kpt ${DATASETS_PATH}/places/${PLACE}/local_features/${LOCAL_FEAT_DESC}/keypoints \
-    -desc ${DATASETS_PATH}/places/${PLACE}/local_features/${LOCAL_FEAT_DESC}/descriptors \
-    -gfeat ${DATASETS_PATH}/places/${PLACE}/global_features/${GLOBAL_FEAT_DESC}/global_features \
-    -matches ${DATASETS_PATH}/places/${PLACE}/local_features/${LOCAL_FEAT_DESC}/NN_no_gv/matches \
-    -matches-gv ${DATASETS_PATH}/places/${PLACE}/local_features/${LOCAL_FEAT_DESC}/NN_colmap_gv/matches \
-    --colmap-map ${DATASETS_PATH}/places/${PLACE}/colmap-sfm/${LOCAL_FEAT_DESC}/${GLOBAL_FEAT_DESC} \
-    -o ${DATASETS_PATH}/places/${PLACE}/colmap-localize/${LOCAL_FEAT_DESC}/${GLOBAL_FEAT_DESC} \
-    --topk ${GLOBAL_FEAT_TOPK} \
-    --config 2
+# for PLACE in ${DATASET_NAMES[*]}; do
+#   kapture_pipeline_localize.py -v debug -f \
+#     -i ${DATASETS_PATH}/places/${PLACE}/mapping \
+#     --query ${DATASETS_PATH}/places/${PLACE}/validation \
+#     -kpt ${DATASETS_PATH}/places/${PLACE}/local_features/${LOCAL_FEAT_DESC}/keypoints \
+#     -desc ${DATASETS_PATH}/places/${PLACE}/local_features/${LOCAL_FEAT_DESC}/descriptors \
+#     -gfeat ${DATASETS_PATH}/places/${PLACE}/global_features/${GLOBAL_FEAT_DESC}/global_features \
+#     -matches ${DATASETS_PATH}/places/${PLACE}/local_features/${LOCAL_FEAT_DESC}/NN_no_gv/matches \
+#     -matches-gv ${DATASETS_PATH}/places/${PLACE}/local_features/${LOCAL_FEAT_DESC}/NN_colmap_gv/matches \
+#     --colmap-map ${DATASETS_PATH}/places/${PLACE}/colmap-sfm/${LOCAL_FEAT_DESC}/${GLOBAL_FEAT_DESC} \
+#     -o ${DATASETS_PATH}/places/${PLACE}/colmap-localize/${LOCAL_FEAT_DESC}/${GLOBAL_FEAT_DESC} \
+#     --topk ${GLOBAL_FEAT_TOPK} \
+#     --config 2
 
-  # you may find results in:
-  cat ${DATASETS_PATH}/places/${PLACE}/colmap-localize/${LOCAL_FEAT_DESC}/${GLOBAL_FEAT_DESC}/eval/stats.txt
-done
+#   # you may find results in:
+#   cat ${DATASETS_PATH}/places/${PLACE}/colmap-localize/${LOCAL_FEAT_DESC}/${GLOBAL_FEAT_DESC}/eval/stats.txt
+# done
 
 # 8) localization query
 for i in "${!DATASET_NAMES[@]}"; do
